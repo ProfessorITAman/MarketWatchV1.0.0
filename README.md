@@ -82,5 +82,5 @@ MarketWatch/
 ├── .gitignore
 └── README.md    ← Вы здесь!
 
-
-
+Аман Тынысов
+https://www.alphavantage.co/
