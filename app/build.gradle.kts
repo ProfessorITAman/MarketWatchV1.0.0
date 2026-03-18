@@ -37,7 +37,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    // ✅ ЭТО НОВЫЙ СТАНДАРТ!
     buildFeatures {
         buildConfig = true  // Генерирует BuildConfig.DEBUG
         compose = true
