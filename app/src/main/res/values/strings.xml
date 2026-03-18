@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MarketWatch</string>
+    <string name="search_ticker_hint">Введите тикер (AAPL, TSLA, MSFT)</string>
+    <string name="language_title">🌐 Язык</string>
+
+    <string name="search">Поиск</string>
+    <string name="favorites">Избранное</string>
+    <string name="details">Детали</string>
+    <string name="settings">Настройки</string>
+    <string name="loading">Загрузка...</string>
+    <string name="error">Ошибка</string>
+    <string name="no_data">Нет данных</string>
+    <string name="remove">Удалить</string>
+    <string name="save">Сохранить</string>
+    <string name="error_no_internet">Нет подключения к интернету</string>
+    <string name="error_api_limit">Превышен лимит API</string>
+    <string name="error_invalid_ticker">Неверный тикер</string>
+    <string name="error_empty_input">Пустой ввод</string>
+    <string name="api_key">API ключ</string>
+    <string name="update_interval">Интервал обновления</string>
+    <string name="display_currency">Валюта отображения</string>
+    <string name="app_language">Язык приложения</string>
+    <string name="russian">Русский</string>
+    <string name="english">English</string>
+    <string name="back">Назад</string>
+    <string name="updating">Обновление...</string>
+    <string name="offline_cache">🌐 Оффлайн: данные из кэша</string>
+    <string name="changes_unavailable">Изменения недоступны</string>
+
+    <string name="auto_refresh">Автообновление</string>
+    <string name="off">Выкл</string>
+    <string name="fifteen_minutes">15 мин</string>
+    <string name="sixty_minutes">60 мин</string>
+    <string name="settings_screen">Настройки</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="light">Светлая</string>
+    <string name="dark">Темная </string>
+    <string name="currency">Валюта </string>
+    <string name="view_details">📊 Подробнее → {symbol}</string>
+    <string name="add_to_favorites">⭐ В избранное</string>
+    <string name="delete">Удалить</string>
+    <string name="refresh">🔄 Обновить</string>
+    <string name="add_first_ticker">Добавьте первый тикер</string>
+    <string name="api_key_title">🔑 API ключ</string>
+    <string name="api_key_hint">Alpha Vantage API Key</string> <!-- подсказка -->
+    <string name="dark_theme_title">🌙 Темная тема</string>
+    <string name="auto_refresh_title">🔄 Автообновление</string>
+    <string name="auto_refresh_title_hint">Автообновление</string>
+    <string name="currency_title">💱 Валюта</string>
+    <string name="change">Изменение</string>
+    <string name="date">Дата</string>
+    <string name="updated">Обновлено</string>
+</resources>
+
+

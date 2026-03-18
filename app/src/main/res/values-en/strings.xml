@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MarketWatch</string>
+    <string name="search_ticker_hint">Enter ticker (AAPL, TSLA, MSFT)</string>
+    <string name="language_title">🌐 Language</string>
+
+    <string name="search">Search</string>
+    <string name="favorites">Favorites</string>
+    <string name="details">Details</string>
+    <string name="settings">Settings</string>
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="no_data">No data</string>
+    <string name="remove">Remove</string>
+    <string name="save">Save</string>
+    <string name="error_no_internet">No internet connection</string>
+    <string name="error_api_limit">API limit exceeded</string>
+    <string name="error_invalid_ticker">Invalid ticker</string>
+    <string name="error_empty_input">Empty input</string>
+    <string name="api_key">API key</string>
+    <string name="update_interval">Update interval</string>
+    <string name="display_currency">Display currency</string>
+    <string name="app_language">App language</string>
+    <string name="russian">Russian</string>
+    <string name="english">English</string>
+    <string name="back">Back</string>
+    <string name="updating">Updating...</string>
+    <string name="offline_cache">🌐 Offline: cached data</string>
+    <string name="changes_unavailable">Changes unavailable</string>
+
+    <string name="auto_refresh">Auto‑refresh</string>
+    <string name="off">Off</string>
+    <string name="fifteen_minutes">15 min</string>
+    <string name="sixty_minutes">60 min</string>
+    <string name="settings_screen">Settings</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="currency">Currency</string>
+    <string name="view_details">📊 View details → {symbol}</string>
+    <string name="add_to_favorites">⭐ Add to favorites</string>
+    <string name="delete">Delete</string>
+    <string name="refresh">🔄 Refresh</string>
+    <string name="add_first_ticker">Add your first ticker</string>
+    <string name="api_key_title">🔑 API key</string>
+    <string name="api_key_hint">Alpha Vantage API Key</string>
+    <string name="dark_theme_title">🌙 Dark theme</string>
+    <string name="auto_refresh_title">🔄 Auto‑refresh</string>
+    <string name="auto_refresh_title_hint">Auto‑refresh</string>
+    <string name="currency_title">💱 Currency</string>
+    <string name="change">Change</string>
+    <string name="date">Date</string>
+    <string name="updated">Updated</string>
+</resources>
+
