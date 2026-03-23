@@ -38,6 +38,7 @@ Room (локальная БД)
 Koin (DI)
 SharedPreferences
 DataStore
+WorkManager
 
 Архитектура
 ┌─ Compose UI (Jetpack Compose + MVI)
