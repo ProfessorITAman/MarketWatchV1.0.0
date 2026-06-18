@@ -7,34 +7,24 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
-/**
- * DAO (Data Access Object) для работы с таблицей избранных акций.
- *
- * Room генерирует реализацию интерфейса на этапе компиляции.
- * Типобезопасные SQL запросы с автогенерацией кода.
- *
- * ⚠️ ВНИМАНИЕ: insert() и delete() НЕ suspend - выполняются в IO потоке Repository!
- * getAllFavorites() возвращает Flow для реактивного UI (автообновление списка).
- */
 @Dao
 interface FavoriteDao {
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insert(favorite: FavoriteEntity)  // ✅ suspend!
+    suspend fun insert(favorite: FavoriteEntity)
 
     @Query("DELETE FROM favorites WHERE symbol = :symbol")
-    suspend fun delete(symbol: String)  // ✅ suspend!
+    suspend fun delete(symbol: String) 
 
-    @Update  // ✅ @Update для update!
-    suspend fun updateFavorite(favorite: FavoriteEntity)  // ✅ suspend!
+    @Update
+    suspend fun updateFavorite(favorite: FavoriteEntity) 
 
     @Query("SELECT * FROM favorites ORDER BY lastUpdated DESC")
-    fun getAllFavorites(): Flow<List<FavoriteEntity>>  // Flow = НЕ suspend!
+    fun getAllFavorites(): Flow<List<FavoriteEntity>> 
 
     @Query("SELECT * FROM favorites")
     suspend fun getFavoritesSnapshot(): List<FavoriteEntity>
 
-    // ✅ НОВОЕ для WorkManager
     @Query("SELECT * FROM favorites")
     suspend fun getAllFavoritesSync(): List<FavoriteEntity>
 
