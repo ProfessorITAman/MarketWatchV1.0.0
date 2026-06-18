@@ -8,7 +8,7 @@ import com.example.marketwatch.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.startKoin
-import java.util.concurrent.TimeUnit  // ✅ КЛЮЧЕВОЙ ИМПОРТ!
+import java.util.concurrent.TimeUnit 
 
 class MyApplication : Application() {
     override fun onCreate() {
@@ -31,7 +31,7 @@ class MyApplication : Application() {
             .build()
 
         val workRequest = PeriodicWorkRequestBuilder<QuoteRefreshWorker>(
-            15, TimeUnit.MINUTES  // ✅ TimeUnit.MINUTES!
+            15, TimeUnit.MINUTES
         )
             .setConstraints(constraints)
             .build()
