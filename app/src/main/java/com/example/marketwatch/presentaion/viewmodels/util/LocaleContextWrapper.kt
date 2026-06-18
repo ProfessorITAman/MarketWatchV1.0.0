@@ -5,14 +5,6 @@ import android.content.ContextWrapper
 import android.content.res.Configuration
 import java.util.Locale
 
-/**
- * ContextWrapper для динамической смены языка приложения.
- *
- * Применяется ко всем экранам Compose/Activity для локализации.
- * Поддерживает ru/en + RTL/LTR направление текста.
- *
- * Использование: LocaleContextWrapper.wrap(context, "ru")
- */
 class LocaleContextWrapper(base: Context) : ContextWrapper(base) //{
 
   //  companion object {
