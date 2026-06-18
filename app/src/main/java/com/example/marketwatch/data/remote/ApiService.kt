@@ -5,16 +5,6 @@ import com.example.marketwatch.data.remote.dto.TimeSeriesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-/**
- * Базовый интерфейс для сервисов API.
- *
- * Определяет контракт для всех сервисов котировок акций.
- * Позволяет легко переключаться между Alpha Vantage ↔ CoinGecko ↔ другой API.
- *
- * Каждый имплементирующий класс (AlphaVantageService) обязан предоставить:
- * - suspend метод getQuote() для получения котировок
- * - автоматическую обработку JSON → GlobalQuote через Retrofit + Gson
- */
 interface ApiService {
     @GET("query")
     suspend fun getQuote(
@@ -41,13 +31,5 @@ interface ApiService {
     ): TimeSeriesResponse
 
     data class TimeSeriesData(val open: Double, val close: Double)
-
-    /**
-     * Получить котировки акции по тикеру.
-     *
-     * @param symbol тикер акции (AAPL, GOOGL, MSFT)
-     * @return QuoteResponse с распарсенными данными GlobalQuote
-     * @throws HttpException, IOException при ошибках сети/API
-     */
 }
 
