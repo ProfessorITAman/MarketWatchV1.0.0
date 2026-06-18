@@ -42,17 +42,11 @@ import androidx.navigation.NavHostController
 import com.example.marketwatch.R
 import com.example.marketwatch.ui.theme.stringResourceWithLocale
 
-/**
- * ✅ SearchScreen - главный экран поиска котировок.
- *
- * UI Flow: Тикер → API → GlobalQuote → Кнопки (Детали/Избранное).
- * Реактивное состояние через SearchState + StateFlow.
- */
 @Composable
 fun SearchScreen(navController: NavHostController) {
-    val viewModel: SearchViewModel = koinViewModel() // ✅ Koin DI
-    val state by viewModel.uiState.collectAsState() // ✅ SearchState (loading/error/quote)
-    var ticker by remember { mutableStateOf("") } // ✅ Локальное поле ввода
+    val viewModel: SearchViewModel = koinViewModel() 
+    val state by viewModel.uiState.collectAsState() 
+    var ticker by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -60,7 +54,6 @@ fun SearchScreen(navController: NavHostController) {
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Заголовок
         Text(
             text = stringResourceWithLocale(R.string.search),
             style = MaterialTheme.typography.headlineMedium,
@@ -68,7 +61,6 @@ fun SearchScreen(navController: NavHostController) {
             color = MaterialTheme.colorScheme.primary
         )
 
-        // Поле поиска с иконкой
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -104,9 +96,9 @@ fun SearchScreen(navController: NavHostController) {
         // Кнопка поиска
         Button(
             onClick = {
-                Log.d("SearchScreen", "🔍 Поиск: '$ticker'") // ← ДОБАВЬ!
+                Log.d("SearchScreen", " Поиск: '$ticker'")
                 viewModel.onSearch(ticker)
-                Log.d("SearchScreen", "✅ onSearch вызван")  // ← ДОБАВЬ!
+                Log.d("SearchScreen", " onSearch вызван") 
             },
             enabled = ticker.length >= 2 && !state.isLoading,
             modifier = Modifier.fillMaxWidth(),
@@ -152,7 +144,6 @@ fun SearchScreen(navController: NavHostController) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // ✅ КНОПКА 1: Подробнее (уже работает)
                     FilledTonalButton(
                         onClick = { navController.navigate(Screen.Detail.createRoute(quote.symbol)) },
                         modifier = Modifier.fillMaxWidth()
@@ -162,10 +153,9 @@ fun SearchScreen(navController: NavHostController) {
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // ✅ КНОПКА 2: Избранное (заглушка для Room)
                     OutlinedButton(
                         onClick = {
-                            viewModel.addToFavorites(quote)  // Новый метод в ViewModel!
+                            viewModel.addToFavorites(quote)
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
