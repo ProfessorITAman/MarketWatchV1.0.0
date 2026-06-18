@@ -1,4 +1,4 @@
-# MarketWatch Android 📱💹 (AlphaVantage API)
+# MarketWatch Android (AlphaVantage API)
 
 Android-приложение для получения котировок акций через **AlphaVantage API** с **Clean Architecture + MVI**.
 
