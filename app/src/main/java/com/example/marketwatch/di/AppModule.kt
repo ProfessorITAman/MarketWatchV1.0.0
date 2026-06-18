@@ -50,7 +50,7 @@ val appModule = module {
         )
     }
 
-    // 4. ViewModels - ✅ ПРАВИЛЬНЫЙ синтаксис!
+    // 4. ViewModels 
     viewModel {
         SearchViewModel(
             get<ApiService>(),
