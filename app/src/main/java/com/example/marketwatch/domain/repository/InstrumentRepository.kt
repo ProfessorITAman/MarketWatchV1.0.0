@@ -8,7 +8,7 @@ import com.example.marketwatch.presentaion.viewmodels.util.NoNetworkException
 import kotlinx.coroutines.flow.Flow
 
 class InstrumentRepository(
-    private val apiService: ApiService,  // ← ТВОЙ существующий ApiService!
+    private val apiService: ApiService,
     private val dao: InstrumentDao,
     private val networkChecker: NetworkChecker,
 ) {
@@ -20,17 +20,14 @@ class InstrumentRepository(
             throw NoNetworkException()
         }
 
-        // ✅ Используем ТВОЙ apiService.getQuote()!
-       // val quote = apiService.getQuote(symbol).globalQuote
-
         val quote = apiService.getQuote(
-            symbol = symbol,  // ✅ ПЕРЕДАЙ symbol!
-            apikey = "CZJ3ZYDNQBDXQ8S6"  // ✅ ХАРДКОД!
+            symbol = symbol,  
+            apikey = "CZJ3ZYDNQBDXQ8S6" 
         )
 
         val entity = InstrumentEntity(
-            symbol = quote.globalQuote?.symbol ?: symbol,  // "01. symbol"
-            price = quote.globalQuote?.price?.toDoubleOrNull() ?: 0.0,  // "05. price"
+            symbol = quote.globalQuote?.symbol ?: symbol,  
+            price = quote.globalQuote?.price?.toDoubleOrNull() ?: 0.0,  
             change = quote.globalQuote?.changePercent
                 ?.replace("%", "")
                 ?.replace("+", "")
