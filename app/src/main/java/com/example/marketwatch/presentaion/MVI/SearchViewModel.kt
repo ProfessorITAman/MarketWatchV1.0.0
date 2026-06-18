@@ -20,48 +20,29 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 
-/**
- * ViewModel экрана поиска котировок.
- *
- * Управляет состоянием UI: поиск → API → Room (избранное) + Snackbar.
- * MVVM + Unidirectional Data Flow (UDF).
- */
 class SearchViewModel(
-    private val apiService: ApiService, // ✅ AlphaVantageService (Retrofit)
+    private val apiService: ApiService,
     private val favoriteDao: FavoriteDao,
-  //  private val settingsRepo: SettingsRepository// ✅ Room DAO для избранного
+  //  private val settingsRepo: SettingsRepository
 ) : ViewModel() {
 
-    /**
-     * ✅ Главное состояние UI (SearchState).
-     * Reactivno обновляет Compose: loading → quote/error → кнопки.
-     */
     private val _uiState = MutableStateFlow(SearchState())
     val uiState: StateFlow<SearchState> = _uiState.asStateFlow()
 
-    /**
-     * ✅ Snackbar сообщения (одноразовые уведомления).
-     * extraBufferCapacity = 1 = не теряем сообщение при быстрых кликах.
-     */
     private val _snackbarMessage = MutableSharedFlow<String?>(extraBufferCapacity = 1)
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
-    /** Очистить Snackbar (кнопка Dismiss) */
     fun clearSnackbar() {
         _snackbarMessage.tryEmit(null)
     }
 
-    /**
-     * ✅ Поиск котировок по тикеру.
-     * UI Flow: Loading → API → Success/Error → Snackbar.
-     */
     fun onSearch(ticker: String) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true)
         try {
             val response = apiService.getQuote(symbol = ticker, apikey = "CZJ3ZYDNQBDXQ8S6")
 
-            Log.d("SearchViewModel", "🔍 РЕАЛЬНЫЙ JSON: ${Gson().toJson(response)}")
-            Log.d("SearchViewModel", "✅ QUOTE: ${response.globalQuote}")  // ← ЭТО ПОКАЖЕТ!
+            Log.d("SearchViewModel", "РЕАЛЬНЫЙ JSON: ${Gson().toJson(response)}")
+            Log.d("SearchViewModel", " QUOTE: ${response.globalQuote}")
 
             _uiState.value = _uiState.value.copy(
                 quote = response.globalQuote,
@@ -74,34 +55,29 @@ class SearchViewModel(
         }
     }
 
-    /**
-     * ✅ Добавить котировку в Room БД (избранное).
-     * Создает FavoriteEntity → insert() → Snackbar "Добавлено!".
-     */
     fun addToFavorites(quote: GlobalQuote) = viewModelScope.launch {
         try {
             val favorite = FavoriteEntity(
-                symbol = quote.symbol, // AAPL
-                price = quote.price.toDoubleOrNull() ?: 0.0, // 150.25 (String→Double)
+                symbol = quote.symbol,
+                price = quote.price.toDoubleOrNull() ?: 0.0, 
                 changePercent = quote.changePercent
-                    .replace("%", "")  // Убираем %
-                    .toDoubleOrNull() ?: 0.0  // String → Double
+                    .replace("%", "") 
+                    .toDoubleOrNull() ?: 0.0  
             )
-            withContext(Dispatchers.IO) { // ✅ БД в IO потоке
-                favoriteDao.insert(favorite)  // ✅ REPLACE если уже есть
+            withContext(Dispatchers.IO) { 
+                favoriteDao.insert(favorite)  
             }
-            showError("✅ ${quote.symbol} добавлено!")
+            showError(" ${quote.symbol} добавлено!")
         } catch (e: Exception) {
-            Log.e("SearchViewModel", "API error", e)  // ← Логируем!
+            Log.e("SearchViewModel", "API error", e)  
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
                 error = e.message ?: "Неизвестная ошибка"
             )
-            showError("❌ Ошибка добавления")
+            showError(" Ошибка добавления")
         }
     }
 
-    /** Приватный эмиттер Snackbar */
     private fun showError(message: String) {
         _snackbarMessage.tryEmit(message)
     }
