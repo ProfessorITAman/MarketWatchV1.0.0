@@ -30,8 +30,8 @@ class InstrumentDetailsViewModel(
                 _uiState.update {
                     it.copy(
                         symbol = symbol,
-                        price = quote?.price?.toString() ?: "N/A",     // ✅ toString()
-                        change = quote?.changePercent?.toString() ?: "—", // ✅ toString()
+                        price = quote?.price?.toString() ?: "N/A",   
+                        change = quote?.changePercent?.toString() ?: "—", 
                         lastUpdateTime = quote?.latestTradingDay ?: "N/A",
                         isLoading = false
                     )
