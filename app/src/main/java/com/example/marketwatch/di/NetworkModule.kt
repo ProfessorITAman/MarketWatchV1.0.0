@@ -10,7 +10,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
-    // 1. OkHttpClient ✅ ОК
     single {
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
@@ -26,7 +25,6 @@ val networkModule = module {
             .build()
     }
 
-    // 2. Retrofit ✅ Правильный способ!
     single {
         Retrofit.Builder()
             .baseUrl("https://www.alphavantage.co/")
@@ -35,7 +33,6 @@ val networkModule = module {
             .build()
     }
 
-    // 3. ApiService из Retrofit ✅ Правильно!
     single<ApiService> { get<Retrofit>().create(ApiService::class.java) }
     single<AlphaVantageApi> { get<Retrofit>().create(AlphaVantageApi::class.java) }
 }
