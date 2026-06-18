@@ -14,9 +14,8 @@ class NetworkRepositoryImpl(
     override suspend fun getQuote(symbol: String): Quote? {
         return try {
             val apiKey = settingsDataStore.getApiKey()
-            // ✅ AlphaVantage требует function=GLOBAL_QUOTE!
             val response = alphaVantageApi.getQuote(
-                function = "GLOBAL_QUOTE",  // ✅ Обязательный параметр!
+                function = "GLOBAL_QUOTE",
                 symbol = symbol,
                 apikey = apiKey
             )
