@@ -46,10 +46,10 @@ class FavoritesViewModel(
 
                 for (favorite in favorites) {
                     val quote = networkRepo.getQuote(favorite.symbol)
-                    if (quote != null) {  // ✅ Domain Quote уже Double!
+                    if (quote != null) {  
                         dao.updatePrice(
                             symbol = favorite.symbol,
-                            price = quote.price  // ✅ String для Room!
+                            price = quote.price 
                         )
                     }
                 }
