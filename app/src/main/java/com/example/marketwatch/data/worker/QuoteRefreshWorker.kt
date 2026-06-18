@@ -27,10 +27,8 @@ class QuoteRefreshWorker(
 
     override suspend fun doWork(): Result {
         return try {
-            // Room Database
             val favoriteDao = AppDatabase.getDatabase(applicationContext).favoriteDao()
 
-            // Retrofit + API (5 строк!)
             val retrofit = Retrofit.Builder()
                 .baseUrl("https://www.alphavantage.co/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -66,8 +64,8 @@ class QuoteRefreshWorker(
                     if (quote != null) {
                         favoriteDao.updateQuote(
                             symbol = favorite.symbol,
-                            price = quote.price,  // ✅ Domain Quote уже Double
-                            changePercent = quote.changePercent,  // ✅ Уже Double
+                            price = quote.price,  
+                            changePercent = quote.changePercent,  
                             lastUpdated = System.currentTimeMillis()
                         )
                         successCount++
