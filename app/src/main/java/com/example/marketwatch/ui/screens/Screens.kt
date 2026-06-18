@@ -40,30 +40,21 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
-/**
- * Навигация приложения (4 экрана).
- * Sealed class = типобезопасные маршруты + аргументы.
- */
 sealed class Screen(val route: String) {
     object Search : Screen("search")
     object Favorites : Screen("favorites")
     object Settings : Screen("settings")
     object Detail : Screen("detail/{symbol}") {
-        fun createRoute(symbol: String) = "detail/$symbol" // AAPL → detail/AAPL
+        fun createRoute(symbol: String) = "detail/$symbol"
     }
 }
 
-/**
- * ✅ FavoritesScreen - список избранных акций из Room БД.
- * Реактивный список (Flow) + кнопки Удалить/Детали.
- */
 @Composable
 fun FavoritesScreen(
     navController: NavHostController,
-    viewModel: FavoritesViewModel = koinViewModel() // ✅ Koin DI
+    viewModel: FavoritesViewModel = koinViewModel() 
 ) {
-    val favorites by viewModel.favorites.collectAsState() // ✅ Автообновление
+    val favorites by viewModel.favorites.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -71,7 +62,7 @@ fun FavoritesScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        if (favorites.isEmpty()) { // ✅ Пустое состояние
+        if (favorites.isEmpty()) {
             item {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -90,7 +81,7 @@ fun FavoritesScreen(
             items(favorites) { favorite ->
                 FavoriteItem(
                     favorite = favorite,
-                    onDelete = { viewModel.deleteFavorite(favorite.symbol) }, //✅ Room delete
+                    onDelete = { viewModel.deleteFavorite(favorite.symbol) }, 
                     onDetails = { navController.navigate(Screen.Detail.createRoute(favorite.symbol)) }
                 )
             }
@@ -98,10 +89,6 @@ fun FavoritesScreen(
     }
 }
 
-/**
- * ✅ Карточка акции с кнопками действий.
- * Цена + изменение % + навигация.
- */
 @Composable
 fun FavoriteItem(favorite: FavoriteEntity, onDelete: () -> Unit, onDetails: () -> Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
@@ -113,10 +100,9 @@ fun FavoriteItem(favorite: FavoriteEntity, onDelete: () -> Unit, onDetails: () -
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(favorite.symbol, style = MaterialTheme.typography.titleLarge)
-                Text("$${String.format("%.2f", favorite.price)}") // ✅ Форматирование
+                Text("$${String.format("%.2f", favorite.price)}") 
                 Text("${String.format("%.2f", favorite.changePercent)}%")
 
-                //  Время обновления
                 Text(
                     text = "${stringResourceWithLocale(R.string.updated)}: ${
                         SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -136,11 +122,6 @@ fun FavoriteItem(favorite: FavoriteEntity, onDelete: () -> Unit, onDetails: () -
     }
 }
 
-/**
- * ✅ Экран деталей акции (заглушка).
- * В будущем: график, полные котировки API.
- */
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(symbol: String, navController: NavHostController) {
@@ -151,14 +132,12 @@ fun DetailScreen(symbol: String, navController: NavHostController) {
         viewModel.loadInstrument(symbol)
     }
 
-    // ✅ ВСЁ UI ВНУТРИ Box!
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 1️⃣ Symbol
         Text(
             text = symbol,
             style = MaterialTheme.typography.headlineMedium,
@@ -167,7 +146,6 @@ fun DetailScreen(symbol: String, navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // 2️⃣ Цена
         Text(
             text = uiState.price,
             style = MaterialTheme.typography.headlineLarge,
@@ -179,7 +157,6 @@ fun DetailScreen(symbol: String, navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 3️⃣ Изменения
         uiState.change?.let { change ->
             val color = if (change.startsWith("-"))
                 MaterialTheme.colorScheme.error
@@ -198,7 +175,6 @@ fun DetailScreen(symbol: String, navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 4️⃣ Время
         Text(
             text = uiState.lastUpdateTime,
             style = MaterialTheme.typography.bodyMedium,
@@ -216,7 +192,6 @@ fun DetailScreen(symbol: String, navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // 5️⃣ Кнопка Обновить
         Button(
             onClick = { viewModel.refreshInstrument() },
             enabled = !uiState.isLoading
@@ -238,19 +213,14 @@ fun DetailScreen(symbol: String, navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 6️⃣ Назад
         OutlinedButton(onClick = { navController.popBackStack() }) {
             Text(stringResourceWithLocale(R.string.back))
         }
-    }  // ← Конец Column
+    }  
 }
 
-/**
- * ✅ SettingsScreen - ВСЕ настройки в одном месте.
- * Реактивная темная тема + сохранение в SharedPreferences.
- */
 @Composable
-fun SettingsScreen() {  // ✅ navController убран
+fun SettingsScreen() {
     val context = LocalContext.current
   //  val settingsRepo = remember { SettingsRepository(context) }
     val settingsDataStore = koinInject<SettingsDataStore>()
@@ -283,7 +253,7 @@ fun SettingsScreen() {  // ✅ navController убран
         // 5. Валюта
       //  item { CurrencySection(settingsRepo) }
 
-        // 6. Язык ✅ НОВЫЙ!
+        // 6. Язык 
        // item { LanguageSection(settingsRepo) }
 
         item { ApiKeySection(settingsDataStore) }
@@ -294,7 +264,6 @@ fun SettingsScreen() {  // ✅ navController убран
     }
 }
 
-// ✅ Вынос в отдельные composables для читаемости
 //@Composable
 //private fun ApiKeySection(settingsRepo: SettingsRepository) {
 //    var apiKey by remember { mutableStateOf(settingsRepo.apiKey) }
@@ -320,7 +289,6 @@ fun SettingsScreen() {  // ✅ navController убран
 private fun ApiKeySection(settingsDataStore: SettingsDataStore) {
     var apiKey by remember { mutableStateOf("") }
 
-    // Загружаем значение
     LaunchedEffect(Unit) {
         apiKey = settingsDataStore.getApiKey()
     }
@@ -425,7 +393,7 @@ private fun DarkModeSection(settingsDataStore: SettingsDataStore) {
    //                 modifier = Modifier
   //                      .fillMaxWidth()
    //                     .clickable {
-  //                          settingsRepo.refreshInterval = value  // ✅ Автоматически вызывает scheduleRefresh()
+  //                          settingsRepo.refreshInterval = value 
   //                      }
    //                     .padding(vertical = 4.dp),
   //                  verticalAlignment = Alignment.CenterVertically
@@ -557,12 +525,12 @@ private fun CurrencySection(settingsDataStore: SettingsDataStore) {
    //             Row(
     //                modifier = Modifier
     //                    .fillMaxWidth()
-     //                   .clickable { settingsRepo.language = code }  // ✅ Универсально!
+     //                   .clickable { settingsRepo.language = code } 
     //                    .padding(vertical = 4.dp),
     //                verticalAlignment = Alignment.CenterVertically
     //            ) {
      //               RadioButton(
-    //                    selected = settingsRepo.language == code,  // ✅ code вместо "en"!
+    //                    selected = settingsRepo.language == code, 
     //                    onClick = { settingsRepo.language = code }
     //                )
     //                Text(label)
@@ -594,7 +562,7 @@ private fun CurrencySection(settingsDataStore: SettingsDataStore) {
                        verticalAlignment = Alignment.CenterVertically
                    ) {
                        RadioButton(
-                           selected = currentLanguage == code,  // ✅ code вместо "en"!
+                           selected = currentLanguage == code,  
                            onClick = {
                                CoroutineScope(Dispatchers.IO).launch {
                                    settingsDataStore.updateLanguage(code)
