@@ -54,11 +54,6 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
-/**
- * Главная Activity с Koin DI + Navigation + Snackbar + Material 3 тема.
- *
- * Инициализирует Koin → NavHost → 4 экрана + BottomNavigation.
- */
 class MainActivity : ComponentActivity() {
    // private lateinit var settingsRepo: SettingsRepository
 
@@ -94,33 +89,24 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /**
-     * ✅ NavHost со Scaffold + BottomNavigation + глобальный Snackbar.
-     *
-     * 3 таба: Поиск | Избранное | Настройки + Detail (modal).
-     * popUpTo(0) = single top навигация (не дублируем экраны).
-     */
     @Composable
     fun MarketWatchNavHost() {
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         val snackbarHostState = remember { SnackbarHostState() }
-        val searchViewModel: SearchViewModel = koinViewModel() // ✅ Глобальный для Snackbar
+        val searchViewModel: SearchViewModel = koinViewModel() 
 
-        // ✅ SnackbarHost ловит сообщения из SearchViewModel
         LaunchedEffect(searchViewModel.snackbarMessage) {
             searchViewModel.snackbarMessage.collectLatest { message ->
                 message?.let {
                     val result = snackbarHostState.showSnackbar(it)
                     when (result) {
                         SnackbarResult.ActionPerformed -> {
-                            // Пользователь нажал кнопку действия (если есть)
                             println("Snackbar action clicked")
                         }
 
                         SnackbarResult.Dismissed -> {
-                            // Snackbar закрыт (смахнут/таймаут)
                             searchViewModel.clearSnackbar()
                         }
                     }
@@ -129,24 +115,24 @@ class MainActivity : ComponentActivity() {
         }
 
         Scaffold(
-            snackbarHost = { SnackbarHost(snackbarHostState) }, // ✅ Глобальный Snackbar
+            snackbarHost = { SnackbarHost(snackbarHostState) },
             bottomBar = {
                 NavigationBar {
                     NavigationBarItem(
                         icon = { Icon(Icons.Default.Search, contentDescription = null) },
-                        label = { Text(stringResourceWithLocale(R.string.search)) }, // ← Было "Поиск"
+                        label = { Text(stringResourceWithLocale(R.string.search)) },
                         selected = currentRoute == Screen.Search.route,
                         onClick = { navController.navigate(Screen.Search.route) { popUpTo(0) } }
                     )
                     NavigationBarItem(
                         icon = { Icon(Icons.Default.Favorite, contentDescription = null) },
-                        label = { Text(stringResourceWithLocale(R.string.favorites)) }, // ← "Избранное"
+                        label = { Text(stringResourceWithLocale(R.string.favorites)) }, 
                         selected = currentRoute == Screen.Favorites.route,
                         onClick = { navController.navigate(Screen.Favorites.route) { popUpTo(0) } }
                     )
                     NavigationBarItem(
                         icon = { Icon(Icons.Default.Settings, contentDescription = null) },
-                        label = { Text(stringResourceWithLocale(R.string.settings)) }, // ← "Настройки"
+                        label = { Text(stringResourceWithLocale(R.string.settings)) }, 
                         selected = currentRoute == Screen.Settings.route,
                         onClick = { navController.navigate(Screen.Settings.route) { popUpTo(0) } }
                     )
@@ -159,7 +145,6 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.padding(padding)
             ) {
                 composable(Screen.Search.route) {
-                    // ✅ Передаем navController через NavBackStackEntry
                     SearchScreen(navController)
                 }
                 composable(Screen.Favorites.route) {
@@ -181,10 +166,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /**
-     * ✅ Material 3 тема + динамическая локализация + темная/светлая.
-     * Реактивно меняется при изменении настроек.
-     */
     @Composable
     fun AppTheme(
         darkTheme: Boolean = isSystemInDarkTheme(),
