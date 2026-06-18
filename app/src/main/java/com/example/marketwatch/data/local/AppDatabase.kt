@@ -8,44 +8,18 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.marketwatch.data.local.FavoriteDao
 
-
-/**
- * Room база данных для хранения избранных акций пользователя.
- *
- * Содержит таблицу FavoriteEntity с тикерами (AAPL, GOOGL) для оффлайн доступа.
- * Singleton паттерн обеспечивает одну БД на приложение.
- *
- * Архитектура: UI → Repository → DAO → Room Database
- *
- * @see FavoriteEntity таблица избранных акций
- * @see FavoriteDao CRUD операции с избранными
- */
 @Database(
     entities = [
         FavoriteEntity::class,
         InstrumentEntity::class
-    ], // ✅ Таблицы БД (сущности)
-    version = 2,  // ✅ Версия схемы (миграции при изменении)
-    exportSchema = false  // ✅ Отключает схему для миграций (debug)
+    ], 
+    version = 2, 
+    exportSchema = false 
 )
 
-abstract class AppDatabase : RoomDatabase() {// ✅ Преобразователи типов (Date, enum)
-
-    /**
-     * Абстрактный метод возвращает DAO для работы с избранными акциями.
-     * Room генерирует реализацию автоматически во время компиляции.
-     */
+abstract class AppDatabase : RoomDatabase() {
     abstract fun favoriteDao(): FavoriteDao
     abstract fun instrumentDao(): InstrumentDao
-
-    /**
-     * Singleton для thread-safe инициализации БД.
-     *
-     * Паттерн Double-checked locking + @Volatile:
-     * 1. INSTANCE проверяется без блокировки
-     * 2. synchronized(this) создает БД один раз
-     * 3. @Volatile обеспечивает видимость изменений между потоками
-     */
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
@@ -87,7 +61,7 @@ abstract class AppDatabase : RoomDatabase() {// ✅ Преобразовател
                     AppDatabase::class.java,
                     "marketwatch_db"
                 )
-                    .addMigrations(MIGRATION_1_2)  // ЭТО РЕШАЕТ КРАШ!
+                    .addMigrations(MIGRATION_1_2)
                     .build()
                 INSTANCE = instance
                 instance
